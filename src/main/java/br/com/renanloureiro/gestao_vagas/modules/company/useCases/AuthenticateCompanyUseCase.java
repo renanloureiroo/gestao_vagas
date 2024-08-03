@@ -24,7 +24,9 @@ public class AuthenticateCompanyUseCase {
 
   public String execute(AuthenticateCompanyDTO authenticateCompanyDTO) {
     CompanyEntity company = this.validateCredentials(authenticateCompanyDTO);
+
     GenerateJwtTokenDTO generateJwtTokenDTO = this.prepareJwtTokenDTO(company);
+    
     return jwtAuthentication.generateJWTToken(generateJwtTokenDTO);
   }
 
@@ -36,8 +38,10 @@ public class AuthenticateCompanyUseCase {
 
   private GenerateJwtTokenDTO prepareJwtTokenDTO(CompanyEntity company) {
     var generateJwtTokenDTO = new GenerateJwtTokenDTO();
+
     generateJwtTokenDTO.setSubject(company.getId().toString());
     generateJwtTokenDTO.setPayload(null);
+    
     return generateJwtTokenDTO;
   }
 }

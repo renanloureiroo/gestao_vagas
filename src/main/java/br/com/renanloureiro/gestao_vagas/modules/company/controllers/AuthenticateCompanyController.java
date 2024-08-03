@@ -25,6 +25,7 @@ public class AuthenticateCompanyController {
   public ResponseEntity<Object> handle(@RequestBody AuthenticateCompanyDTO authenticateCompanyDTO) {
     
     try {
+      System.out.println(authenticateCompanyDTO);
       var response = this.authenticateCompanyUseCase.execute(authenticateCompanyDTO);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     } catch (InvalidCredentialsException e) {

@@ -4,7 +4,7 @@ import br.com.renanloureiro.gestao_vagas.dtos.GenerateJwtTokenDTO;
 
 public interface JwtAuthentication {
   String generateJWTToken(GenerateJwtTokenDTO generateJwtTokenDTO);
-  boolean validateJWTToken(String token);
+  String validateJWTToken(String token);
 
   
 }
