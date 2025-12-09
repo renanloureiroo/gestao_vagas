@@ -9,13 +9,14 @@ import br.com.renanloureiro.gestao_vagas.exceptions.InvalidCredentialsException;
 import br.com.renanloureiro.gestao_vagas.modules.company.dtos.AuthenticateCompanyDTO;
 import br.com.renanloureiro.gestao_vagas.modules.company.entities.CompanyEntity;
 import br.com.renanloureiro.gestao_vagas.modules.company.repositories.CompanyRepository;
+import br.com.renanloureiro.gestao_vagas.providers.jwt_authentication.ApplicationUsers;
 import br.com.renanloureiro.gestao_vagas.providers.jwt_authentication.JwtAuthentication;
 
 @Service
 public class AuthenticateCompanyUseCase {
   @Autowired
   private CompanyRepository companyRepository;
-  
+
   @Autowired
   private JwtAuthentication jwtAuthentication;
 
@@ -26,14 +27,14 @@ public class AuthenticateCompanyUseCase {
     CompanyEntity company = this.validateCredentials(authenticateCompanyDTO);
 
     GenerateJwtTokenDTO generateJwtTokenDTO = this.prepareJwtTokenDTO(company);
-    
-    return jwtAuthentication.generateJWTToken(generateJwtTokenDTO);
+
+    return jwtAuthentication.generateJWTToken(generateJwtTokenDTO, ApplicationUsers.COMPANY);
   }
 
   private CompanyEntity validateCredentials(AuthenticateCompanyDTO authenticateCompanyDTO) {
     return companyRepository.findByUsername(authenticateCompanyDTO.getUsername())
-      .filter(company -> this.passwordEncoder.matches(authenticateCompanyDTO.getPassword(), company.getPassword()))
-      .orElseThrow(InvalidCredentialsException::new);
+        .filter(company -> this.passwordEncoder.matches(authenticateCompanyDTO.getPassword(), company.getPassword()))
+        .orElseThrow(InvalidCredentialsException::new);
   }
 
   private GenerateJwtTokenDTO prepareJwtTokenDTO(CompanyEntity company) {
@@ -41,7 +42,7 @@ public class AuthenticateCompanyUseCase {
 
     generateJwtTokenDTO.setSubject(company.getId().toString());
     generateJwtTokenDTO.setPayload(null);
-    
+
     return generateJwtTokenDTO;
   }
 }

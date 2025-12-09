@@ -16,11 +16,13 @@ public class CreateCandidateUseCase {
   private CandidateRespository candidateRespository;
 
   public CandidateEntity execute(CandidateEntity candidateEntity) {
-    this.candidateRespository.findyByUsernameOrEmail(candidateEntity.getUsername(), candidateEntity.getEmail()).ifPresent((user) -> {
-      Logger.getLogger(CreateCandidateUseCase.class.toString()).log(Level.INFO,"Erro ao criar candidato, username ou email já cadastrado");
-      throw new CandidateFoundException();
-    });
-    
+    this.candidateRespository.findyByUsernameOrEmail(candidateEntity.getUsername(), candidateEntity.getEmail())
+        .ifPresent((user) -> {
+          Logger.getLogger(CreateCandidateUseCase.class.toString()).log(Level.INFO,
+              "Erro ao criar candidato, username ou email já cadastrado");
+          throw new CandidateFoundException();
+        });
+
     return this.candidateRespository.save(candidateEntity);
   }
 }

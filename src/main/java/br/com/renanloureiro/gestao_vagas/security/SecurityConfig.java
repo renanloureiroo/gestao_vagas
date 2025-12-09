@@ -16,17 +16,17 @@ public class SecurityConfig {
 
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.csrf(csrf ->  csrf.disable())
-    .authorizeHttpRequests(auth -> {
-      auth.requestMatchers("/candidates")
-      .permitAll()
-      .requestMatchers("/companies")
-      .permitAll();
-      auth.requestMatchers("/companies/session")
-      .permitAll();
-      auth.anyRequest().authenticated();
-    })
-    .addFilterBefore(this.securityFilter, BasicAuthenticationFilter.class);
+    http.csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> {
+          auth.requestMatchers("/candidates").permitAll()
+              .requestMatchers("/companies").permitAll()
+              .requestMatchers("/auth/companies").permitAll()
+              .requestMatchers("/auth/candidates").permitAll();
+
+          auth.anyRequest().authenticated();
+        })
+        .addFilterBefore(this.securityFilter, BasicAuthenticationFilter.class);
+
     return http.build();
   }
 

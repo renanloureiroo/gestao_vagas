@@ -16,10 +16,10 @@ public class CreateJobUseCase {
   private JobRepository jobRepository;
 
   public JobEntity execute(JobEntity job) {
-    
-  var companyExists  = this.companyRepository.findById(job.getCompanyId());
-    
-    if(companyExists.isEmpty()) {
+
+    var companyExists = this.companyRepository.findById(job.getCompanyId());
+
+    if (companyExists.isEmpty()) {
       throw new CompanyNotFoundException();
     }
 

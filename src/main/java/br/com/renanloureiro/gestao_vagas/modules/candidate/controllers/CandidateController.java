@@ -20,14 +20,13 @@ public class CandidateController {
 
   @PostMapping()
   public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidate) {
-    try{
-      var result =  this.createCandidateUseCase.execute(candidate);
+    try {
+      var result = this.createCandidateUseCase.execute(candidate);
       return ResponseEntity.status(HttpStatus.CREATED).body(result);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
-    
   }
 
 }

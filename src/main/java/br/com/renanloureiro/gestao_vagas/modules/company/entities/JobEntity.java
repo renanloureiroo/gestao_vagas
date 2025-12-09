@@ -13,12 +13,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name ="job")
+@Entity(name = "job")
 @Data
 @Builder
 @AllArgsConstructor
@@ -35,7 +36,6 @@ public class JobEntity {
   @ManyToOne()
   @JoinColumn(name = "campany_id", insertable = false, updatable = false)
   private CompanyEntity company;
-
 
   @Column(name = "company_id", nullable = false)
   private UUID companyId;
