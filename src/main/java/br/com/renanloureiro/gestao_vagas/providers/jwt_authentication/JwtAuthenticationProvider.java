@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 import br.com.renanloureiro.gestao_vagas.dtos.GenerateJwtTokenDTO;
 
@@ -40,18 +41,19 @@ public class JwtAuthenticationProvider implements JwtAuthentication {
   }
 
   @Override
-  public String validateJWTToken(String token, ApplicationUsers applicationUsers) {
+  public DecodedJWT validateJWTToken(String token, ApplicationUsers applicationUsers) {
     try {
       token = token.replace("Bearer ", "");
       var secretKey = applicationUsers == ApplicationUsers.COMPANY ? this.secretKey : this.secretKeyCandidate;
       Algorithm algorithm = Algorithm.HMAC256(secretKey);
-      var subject = JWT.require(algorithm)
+      var tokenDecoded = JWT.require(algorithm)
           .build()
-          .verify(token)
-          .getSubject();
-      return subject;
+          .verify(token);
+
+      return tokenDecoded;
     } catch (JWTVerificationException exception) {
-      return "";
+      exception.printStackTrace();
+      return null;
     }
   }
 

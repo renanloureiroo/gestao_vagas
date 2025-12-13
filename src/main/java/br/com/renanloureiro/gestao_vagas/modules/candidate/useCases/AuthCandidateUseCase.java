@@ -43,15 +43,16 @@ public class AuthCandidateUseCase {
     }
 
     var generateJwtTokenDTO = new GenerateJwtTokenDTO();
-
+    var expirationTime = Instant.now().plus(Duration.ofMinutes(10)).toEpochMilli();
     generateJwtTokenDTO.setSubject(candidate.getId().toString());
-    generateJwtTokenDTO.setExpirationTime(Instant.now().plus(Duration.ofMinutes(10)).toEpochMilli());
-    generateJwtTokenDTO.setRoles(Arrays.asList("candidate"));
+    generateJwtTokenDTO.setExpirationTime(expirationTime);
+    generateJwtTokenDTO.setRoles(Arrays.asList("CANDIDATE"));
 
     var accessToken = this.jwtAuthentication.generateJWTToken(generateJwtTokenDTO, ApplicationUsers.CANDIDATE);
 
     return AuthCandidateResponseDTO.builder()
         .access_token(accessToken)
+        .expires_in(expirationTime)
         .build();
   }
 
