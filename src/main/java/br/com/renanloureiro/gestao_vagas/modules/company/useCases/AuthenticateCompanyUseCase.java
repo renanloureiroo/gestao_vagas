@@ -1,11 +1,16 @@
 package br.com.renanloureiro.gestao_vagas.modules.company.useCases;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.renanloureiro.gestao_vagas.dtos.GenerateJwtTokenDTO;
 import br.com.renanloureiro.gestao_vagas.exceptions.InvalidCredentialsException;
+import br.com.renanloureiro.gestao_vagas.modules.company.dtos.AuthCompanyResponseDTO;
 import br.com.renanloureiro.gestao_vagas.modules.company.dtos.AuthenticateCompanyDTO;
 import br.com.renanloureiro.gestao_vagas.modules.company.entities.CompanyEntity;
 import br.com.renanloureiro.gestao_vagas.modules.company.repositories.CompanyRepository;
@@ -23,26 +28,26 @@ public class AuthenticateCompanyUseCase {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
-  public String execute(AuthenticateCompanyDTO authenticateCompanyDTO) {
+  public AuthCompanyResponseDTO execute(AuthenticateCompanyDTO authenticateCompanyDTO) {
     CompanyEntity company = this.validateCredentials(authenticateCompanyDTO);
 
-    GenerateJwtTokenDTO generateJwtTokenDTO = this.prepareJwtTokenDTO(company);
+    GenerateJwtTokenDTO generateJwtTokenDTO = new GenerateJwtTokenDTO();
+    var expirationTime = Instant.now().plus(Duration.ofMinutes(10)).toEpochMilli();
+    generateJwtTokenDTO.setSubject(company.getId().toString());
+    generateJwtTokenDTO.setRoles(Arrays.asList("COMPANY"));
+    generateJwtTokenDTO.setExpirationTime(expirationTime);
 
-    return jwtAuthentication.generateJWTToken(generateJwtTokenDTO, ApplicationUsers.COMPANY);
+    AuthCompanyResponseDTO response = AuthCompanyResponseDTO.builder()
+        .access_token(jwtAuthentication.generateJWTToken(generateJwtTokenDTO, ApplicationUsers.COMPANY))
+        .expires_in(expirationTime)
+        .build();
+
+    return response;
   }
 
   private CompanyEntity validateCredentials(AuthenticateCompanyDTO authenticateCompanyDTO) {
     return companyRepository.findByUsername(authenticateCompanyDTO.getUsername())
         .filter(company -> this.passwordEncoder.matches(authenticateCompanyDTO.getPassword(), company.getPassword()))
         .orElseThrow(InvalidCredentialsException::new);
-  }
-
-  private GenerateJwtTokenDTO prepareJwtTokenDTO(CompanyEntity company) {
-    var generateJwtTokenDTO = new GenerateJwtTokenDTO();
-
-    generateJwtTokenDTO.setSubject(company.getId().toString());
-    generateJwtTokenDTO.setPayload(null);
-
-    return generateJwtTokenDTO;
   }
 }

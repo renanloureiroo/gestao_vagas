@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,23 +19,24 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/companies")
+@RequestMapping("/companies/jobs")
 public class CreateJobController {
-  
+
   @Autowired
   private CreateJobUseCase createJobUseCase;
 
-  @PostMapping("/jobs")
+  @PostMapping()
+  @PreAuthorize("hasRole('COMPANY')")
   public ResponseEntity<Object> create(@Valid @RequestBody CreateJobDTO job, HttpServletRequest request) {
     try {
       var companyId = request.getAttribute("company_id");
 
       var newJob = JobEntity.builder()
-      .benefits(job.getBeneficts())
-      .description(job.getDescription())
-      .level(job.getLevel())
-      .companyId(UUID.fromString(companyId.toString()))
-      .build();
+          .benefits(job.getBeneficts())
+          .description(job.getDescription())
+          .level(job.getLevel())
+          .companyId(UUID.fromString(companyId.toString()))
+          .build();
 
       var result = this.createJobUseCase.execute(newJob);
       return ResponseEntity.status(HttpStatus.CREATED).body(result);
