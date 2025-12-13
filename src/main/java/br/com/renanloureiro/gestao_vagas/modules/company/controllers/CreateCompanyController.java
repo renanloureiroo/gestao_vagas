@@ -21,8 +21,8 @@ public class CreateCompanyController {
   @PostMapping()
   public ResponseEntity<Object> create(@Valid @RequestBody CompanyEntity company) {
     try{
-      var result = this.createCompanyUseCase.execute(company);
-      return ResponseEntity.status(HttpStatus.CREATED).body(result);
+      this.createCompanyUseCase.execute(company);
+      return ResponseEntity.status(HttpStatus.CREATED).body(null);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }

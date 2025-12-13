@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.renanloureiro.gestao_vagas.exceptions.CandidateFoundException;
@@ -15,6 +16,9 @@ public class CreateCandidateUseCase {
   @Autowired
   private CandidateRespository candidateRespository;
 
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
   public CandidateEntity execute(CandidateEntity candidateEntity) {
     this.candidateRespository.findyByUsernameOrEmail(candidateEntity.getUsername(), candidateEntity.getEmail())
         .ifPresent((user) -> {
@@ -22,6 +26,9 @@ public class CreateCandidateUseCase {
               "Erro ao criar candidato, username ou email já cadastrado");
           throw new CandidateFoundException();
         });
+
+    var passwordHash = this.passwordEncoder.encode(candidateEntity.getPassword());
+    candidateEntity.setPassword(passwordHash);
 
     return this.candidateRespository.save(candidateEntity);
   }
