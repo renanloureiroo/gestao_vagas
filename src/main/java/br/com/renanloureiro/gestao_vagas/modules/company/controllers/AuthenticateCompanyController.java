@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.com.renanloureiro.gestao_vagas.exceptions.InvalidCredentialsException;
 import br.com.renanloureiro.gestao_vagas.modules.company.dtos.AuthenticateCompanyDTO;
@@ -15,17 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 
-@Controller
-@RequestMapping("/companies/session")
+@RestController
+@RequestMapping("/companies")
 public class AuthenticateCompanyController {
   @Autowired
   private AuthenticateCompanyUseCase authenticateCompanyUseCase;
 
-  @PostMapping()
+  @PostMapping("/auth")
   public ResponseEntity<Object> handle(@RequestBody AuthenticateCompanyDTO authenticateCompanyDTO) {
     
     try {
-      System.out.println(authenticateCompanyDTO);
       var response = this.authenticateCompanyUseCase.execute(authenticateCompanyDTO);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     } catch (InvalidCredentialsException e) {

@@ -18,13 +18,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/companies/jobs")
+@RequestMapping("/companies")
 public class CreateJobController {
   
   @Autowired
   private CreateJobUseCase createJobUseCase;
 
-  @PostMapping()
+  @PostMapping("/jobs")
   public ResponseEntity<Object> create(@Valid @RequestBody CreateJobDTO job, HttpServletRequest request) {
     try {
       var companyId = request.getAttribute("company_id");

@@ -15,7 +15,9 @@ import br.com.renanloureiro.gestao_vagas.modules.candidate.dtos.AuthCandidateRes
 import br.com.renanloureiro.gestao_vagas.modules.candidate.repositories.CandidateRespository;
 import br.com.renanloureiro.gestao_vagas.providers.jwt_authentication.ApplicationUsers;
 import br.com.renanloureiro.gestao_vagas.providers.jwt_authentication.JwtAuthentication;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class AuthCandidateUseCase {
   @Autowired
@@ -28,6 +30,8 @@ public class AuthCandidateUseCase {
   private JwtAuthentication jwtAuthentication;
 
   public AuthCandidateResponseDTO execute(AuthCandidateRequestDTO authCandidateRequestDTO) {
+    log.info("Authenticating candidate: {}", authCandidateRequestDTO.username());
+
     var candidate = this.candidateRespository.findByUsername(authCandidateRequestDTO.username()).orElseThrow(() -> {
       throw new InvalidCredentialsException();
     });
