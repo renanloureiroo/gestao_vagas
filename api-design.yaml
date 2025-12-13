@@ -6,21 +6,353 @@ meta:
   created: 1765637640331
   modified: 1765637640331
   description: ""
+collection:
+  - name: Company
+    meta:
+      id: fld_c45dfc0655874faa88e2ee038730954e
+      created: 1765638155028
+      modified: 1765638906113
+      sortKey: -1765638155028
+      description: ""
+    children:
+      - url: "{{ _.baseUrl }}/companies"
+        name: Criar conta para empresa
+        meta:
+          id: req_5d846ba121134e4cb0f13f47badea2db
+          created: 1765638216346
+          modified: 1765638769296
+          isPrivate: false
+          description: ""
+          sortKey: -1765638216346
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"username": "renanloureiro",
+            	"email": "empresa@email.com",
+            	"password": "123456",
+            	"websiteUrl": "www.github.com/renanloureiroo",
+            	"name": "Renan Loureiro",
+            	"description": "Software House"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.1.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/companies/auth"
+        name: "Login "
+        meta:
+          id: req_b5617ace00db4d44929394500bd49b33
+          created: 1765638841339
+          modified: 1765638841339
+          isPrivate: false
+          description: ""
+          sortKey: -1765638216396
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"username": "renanloureiro",
+            	"password": "123456"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.1.0
+            description: ""
+            disabled: false
+        scripts:
+          afterResponse: |+
+            
+            insomnia.environment.set("accessToken", insomnia.response.body);
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/companies/jobs"
+        name: New Request
+        meta:
+          id: req_1fb0884e95f34860ab873c36f21557ef
+          created: 1765638913028
+          modified: 1765638955114
+          isPrivate: false
+          description: ""
+          sortKey: -1765638913028
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"beneficts": "Domingo de folga",
+            	"description": "Moleza",
+            	"level": "Junior"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.1.0
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.accessToken }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Candidates
+    meta:
+      id: fld_6189b915403c4c688449876837bbb50b
+      created: 1765638695450
+      modified: 1765638888166
+      sortKey: -1765638695450
+      description: ""
+    children:
+      - url: "{{ _.baseUrl }}/candidates/auth"
+        name: Login
+        meta:
+          id: req_7342dfb3bdcb4bca86472695658086b0
+          created: 1765638520823
+          modified: 1765638886453
+          isPrivate: false
+          description: ""
+          sortKey: -1765638699265
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"username": "johndoe",
+            	"password": "123456"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.1.0
+            description: ""
+            disabled: false
+        scripts:
+          afterResponse: >+
+            
+            insomnia.environment.set("candidateAccessToken",
+            insomnia.response.body);
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/candidates"
+        name: Criar conta para candidato
+        meta:
+          id: req_24dadccd5c4046e1adeb9c0197685ed8
+          created: 1765638718607
+          modified: 1765638734353
+          isPrivate: false
+          description: ""
+          sortKey: -1765638699165
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"name": "John Doe",
+            	"username": "johndoe",
+            	"email": "johndoe@email.com",
+            	"password": "123456",
+            	"description": "Dev tetinha"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.1.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
     id: jar_8a4eb31330fb9c3455510867f975fe728415192c
     created: 1765637640346
-    modified: 1765637640346
+    modified: 1765638906107
 environments:
   name: Base Environment
   meta:
     id: env_8a4eb31330fb9c3455510867f975fe728415192c
     created: 1765637640345
-    modified: 1765637640345
+    modified: 1765638906113
     isPrivate: false
+  subEnvironments:
+    - name: desenvolvimento
+      meta:
+        id: env_425ef3d41f4445e5b15248566e987188
+        created: 1765638250091
+        modified: 1765638906110
+        isPrivate: false
+        sortKey: 1765638250091
+      data:
+        baseUrl: http://localhost:8080
+        accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0ZWYxNDI4NC04ODViLTQ1ODktYWY4Mi1iNTUzOTQ0MTJlYmUiLCJyb2xlcyI6bnVsbCwicGF5bG9hZCI6bnVsbCwiZXhwIjoxNzY1NjM5ODA2fQ.FrNKSqhhNhy7uwpSwu3Ke4SvMtqKmxxKbvrHrF8D_1g
+        candidateAccessToken: '{"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ZmRhYjg5OS0wZGRmLTQ2YjktOTk0NS0zODdmZWYzZTI3MTIiLCJyb2xlcyI6WyJjYW5kaWRhdGUiXSwicGF5bG9hZCI6bnVsbCwiZXhwIjozNTMxMjc4Mzc2fQ.XPf6yEx2S-bgQ4q2-KDYL-_2P0MF1Nb7nj4RGUoxB1U"}'
+      color: "#000000"
 spec:
+  contents:
+    openapi: 3.0.0
+    info:
+      title: Gestão Vagas
+      version: 1.0.0
+      description: Api para gestão de vagas entre empresas e candidatos.
+      contact:
+        name: API Support
+        email: renanloureiro.dev@gmail.com
+    servers:
+      - url: http://localhost:8080
+    tags:
+      - name: Company
+        description: Endpoints para empresas
+      - name: Candidate
+        description: Endpoints para candidatos
+    paths:
+      /companies:
+        post:
+          summary: Criar conta para empresa
+          description: Returns a list of all TODO items.
+          operationId: listTodos
+          tags:
+            - Company
+          responses:
+            "201":
+              description: Conta criada
+              content:
+                application/json:
+                  schema:
+                    type: string
+                    items:
+                      $ref: "#/components/schemas/Todo"
+      /todos/{id}:
+        parameters:
+          - in: path
+            name: id
+            required: true
+            description: The ID of the TODO item
+            schema:
+              type: string
+        get:
+          summary: Get a todo by ID
+          description: Retrieves a specific TODO item by its ID.
+          operationId: getTodoById
+          tags:
+            - Todos
+          responses:
+            "200":
+              description: The requested TODO item
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Todo"
+            "404":
+              description: TODO item not found
+        put:
+          summary: Update a todo by ID
+          description: Updates a specific TODO item by its ID.
+          operationId: updateTodo
+          tags:
+            - Todos
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/TodoInput"
+          responses:
+            "200":
+              description: The updated TODO item
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Todo"
+            "404":
+              description: TODO item not found
+        delete:
+          summary: Delete a todo by ID
+          description: Deletes a specific TODO item by its ID.
+          operationId: deleteTodo
+          tags:
+            - Todos
+          responses:
+            "204":
+              description: TODO item deleted
+            "404":
+              description: TODO item not found
+    components:
+      schemas:
+        Todo:
+          type: object
+          description: A TODO item
+          properties:
+            id:
+              type: string
+              description: Unique identifier for the TODO item
+            title:
+              type: string
+              description: The title of the TODO item
+            completed:
+              type: boolean
+              description: Indicates if the TODO item is completed
+          required:
+            - id
+            - title
+            - completed
+        TodoInput:
+          type: object
+          description: Input data for creating or updating a TODO item
+          properties:
+            title:
+              type: string
+              description: The title of the TODO item
+            completed:
+              type: boolean
+              description: Indicates if the TODO item is completed
+          required:
+            - title
+            - completed
   meta:
     id: spc_a16a603994f3438ba3fc9d793ea22f3a
-    created: 1765637640344
-    modified: 1765637640344
+    created: 1765637736815
+    modified: 1765638101961
