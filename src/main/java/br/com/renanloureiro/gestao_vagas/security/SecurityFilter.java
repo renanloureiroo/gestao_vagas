@@ -1,11 +1,11 @@
 package br.com.renanloureiro.gestao_vagas.security;
 
 import java.io.IOException;
-import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -39,9 +39,13 @@ public class SecurityFilter extends OncePerRequestFilter {
         }
 
         request.setAttribute("company_id", tokenDecoded.getSubject());
+        var roles = tokenDecoded.getClaim("roles").asList(String.class);
+        var grants = roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+            .toList();
+
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(tokenDecoded.getSubject(),
             null,
-            Collections.emptyList());
+            grants);
         SecurityContextHolder.getContext().setAuthentication(auth);
       }
     }
